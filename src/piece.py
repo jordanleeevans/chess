@@ -20,7 +20,6 @@ class Piece:
         cwd = Path.cwd()
         self.image = os.path.join(cwd.parent, "assets\images", f"imgs-{size}px/{self.colour}_{piece_name}.png")
         
-        
     def add_move(self, move: Move):
         self.moves.append(move)
     
@@ -45,7 +44,7 @@ class Pawn(Piece):
         end = row + (self.direction * (steps + 1))
         
         horizontal_moves =  [
-            [i, col] for i in range(start, end, self.direction)
+            [i, col] for i in range(start, end, self.direction) if in_range(i, col)
         ]
         
         diagonal_moves = [
