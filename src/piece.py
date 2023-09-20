@@ -1,6 +1,6 @@
 import os
 from move import Move
-from utils import all_horizontal_moves, all_vertical_moves, all_diagonal_moves, in_range
+from utils import in_range
 
 class Piece:
 
