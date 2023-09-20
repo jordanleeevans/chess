@@ -24,7 +24,9 @@ class TestBishopMovement(TestCase):
         self._populate_square(5, 5, Pawn("black"))
         
         self.board.calculate_moves(self.bishop, 3, 3)
-        self.assertEqual(len(self.bishop.moves), 8)
+        
+        # Has 10 free squares, and 1 square with a rival piece which can be captured
+        self.assertEqual(len(self.bishop.moves), 11)
         
     def test_bishop__handle_bishop_moves__blocked_by_team_piece(self):
         
@@ -35,7 +37,9 @@ class TestBishopMovement(TestCase):
         self._populate_square(5, 5, Pawn("white"))
         
         self.board.calculate_moves(self.bishop, 3, 3)
-        self.assertEqual(len(self.bishop.moves), 8)
+        
+        # Has 10 free squares, and 1 square with a team piece which cannot be occupied
+        self.assertEqual(len(self.bishop.moves), 10)
     
     def _populate_square(self, row: int, col: int, piece: Piece):
         self.board.squares[row][col].piece = piece
