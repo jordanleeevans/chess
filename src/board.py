@@ -12,6 +12,18 @@ class Board:
         self._place_pieces("white")
         self._place_pieces("black")
 
+    def __str__(self):
+        board_layout = f"{'-' * 33}\n"
+        for row in range(ROWS):
+            for col in range(COLS):
+                if self.squares[row][col].occupied:
+                    board_layout += f"| {self.squares[row][col].piece.name[0]} "
+                    continue
+                board_layout += f"| X "
+            board_layout += "|\n"
+            board_layout += f"{'-' * 33}\n"
+        return board_layout
+    
     def _create_board(self):
         """Create the board with squares."""
         self.squares = [
