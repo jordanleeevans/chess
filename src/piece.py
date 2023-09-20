@@ -1,7 +1,7 @@
 import os
 from move import Move
 from utils import in_range
-
+from pathlib import Path
 class Piece:
 
     def __init__(self, name:str, colour:str, value:int, image_rect:str=None):
@@ -17,7 +17,9 @@ class Piece:
     def set_image(self, size:int=80):
         """Set the image of the piece."""
         piece_name = self.name.lower()
-        self.image = os.path.join(f"assets/images/imgs-{size}px/{self.colour}_{piece_name}.png")
+        cwd = Path.cwd()
+        self.image = os.path.join(cwd.parent, "assets\images", f"imgs-{size}px/{self.colour}_{piece_name}.png")
+        
         
     def add_move(self, move: Move):
         self.moves.append(move)

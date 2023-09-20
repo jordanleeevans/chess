@@ -6,7 +6,7 @@ from board import Board
 class TestBishopMovement(TestCase):
     
     def setUp(self):
-        with mock.patch("src.board.Board._place_pieces"):
+        with mock.patch("board.Board._place_pieces"):
             self.board = Board()
         self.bishop = self._populate_square(3, 3, Bishop("white"))
             

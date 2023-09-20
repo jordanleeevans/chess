@@ -1,6 +1,6 @@
 import unittest
-from src.board import Board
-from src.piece import Pawn, Knight, Bishop, Rook, Queen, King
+from board import Board
+from piece import Pawn, Knight, Bishop, Rook, Queen, King
 class TestBoard(unittest.TestCase):
     
     def setUp(self):
