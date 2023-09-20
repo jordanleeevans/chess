@@ -2,7 +2,7 @@ from settings import *
 from square import Square
 from piece import *
 from move import Move
-
+from typing import Union
 class Board:
 
     def __init__(self):
@@ -63,13 +63,13 @@ class Board:
         elif isinstance(piece, Knight):
             self._handle_knight_moves(piece, initial_row, initial_col)
         elif isinstance(piece, King):
-            self._handle_king_moves(piece, initial_row, initial_col)
+            self._handle_common_piece_moves(piece, initial_row, initial_col)
         elif isinstance(piece, Rook):
-            self._handle_rook_moves(piece, initial_row, initial_col)
+            self._handle_common_piece_moves(piece, initial_row, initial_col)
         elif isinstance(piece, Bishop):
-            self._handle_bishop_moves(piece, initial_row, initial_col)
+            self._handle_common_piece_moves(piece, initial_row, initial_col)
         elif isinstance(piece, Queen):
-            self._handle_queen_moves(piece, initial_row, initial_col)
+            self._handle_common_piece_moves(piece, initial_row, initial_col)
         else:
             raise ValueError(f"Invalid piece: {piece}")
         
@@ -113,7 +113,7 @@ class Board:
             
             self._add_move(piece, initial_row, initial_col, target_row, target_col)
                 
-    def _handle_knight_moves(self, piece:Piece, initial_row:int, initial_col:int):
+    def _handle_knight_moves(self, piece:Knight, initial_row:int, initial_col:int):
         """Check if current piece is a knight, handle jumping over pieces."""
         for move in piece.possible_moves(initial_row, initial_col):
             
@@ -128,23 +128,11 @@ class Board:
                     pass
                 
                 self._add_move(piece, initial_row, initial_col, target_row, target_col)
-                
-    def _handle_king_moves(self, piece:Piece, initial_row:int, initial_col:int):
+            
+    def _handle_common_piece_moves(self, piece:Union[Bishop,Rook,Queen,King], initial_row:int, initial_col:int):
         """Check if current piece is a king, handle castling."""
         
-        for move in piece.possible_moves(initial_row, initial_col):
-            
-            target_row, target_col = move
-            target_square = self.squares[target_row][target_col]
-            
-            if target_square.empty_or_opposing(piece.colour):
-                
-                self._add_move(piece, initial_row, initial_col, target_row, target_col)
-                
-        
-    def _handle_rook_moves(self, piece:Piece, initial_row:int, initial_col:int):
-        
-        for move_increment in piece.possible_moves(initial_row, initial_col):
+        for move_increment in piece.allowed_directions:
             
             row_increment, col_increment = move_increment
             
@@ -169,46 +157,6 @@ class Board:
                     break
                 
                 target_increment = [target_increment[0] + row_increment, target_increment[1] + col_increment]
-                    
-    def _handle_bishop_moves(self, piece:Piece, initial_row:int, initial_col:int):
-        
-        # TODO: if piece moves onto square in possible moves, then we need to make sure that the bishop can not move past it
-        for move_increment in piece.possible_moves(initial_row, initial_col):
-            
-            row_increment, col_increment = move_increment
-            
-            target_increment = [initial_row + row_increment, initial_col + col_increment]
-            
-            while True:
-                
-                if not in_range(*target_increment):
-                    break
-                
-                target_row, target_col = target_increment
-                target_square = self.squares[target_row][target_col]
-                
-                if not target_square.occupied:
-                    self._add_move(piece, initial_row, initial_col, target_row, target_col)
-                
-                if target_square.has_opposing_piece(piece.colour):
-                    self._add_move(piece, initial_row, initial_col, target_row, target_col)
-                    break
-                
-                if target_square.has_team_piece(piece.colour):
-                    break
-                
-                target_increment = [target_increment[0] + row_increment, target_increment[1] + col_increment]
-                
-    def _handle_queen_moves(self, piece:Piece, initial_row:int, initial_col:int):
-        
-        for move in piece.possible_moves(initial_row, initial_col):
-            
-            target_row, target_col = move
-            target_square = self.squares[target_row][target_col]
-            
-            if target_square.empty_or_opposing(piece.colour):
-                
-                self._add_move(piece, initial_row, initial_col, target_row, target_col)
                 
     def _add_move(self, piece:Piece, initial_row:int, initial_col:int, target_row:int, target_col:int):
         initial_square = Square(initial_row, initial_col)

@@ -33,6 +33,9 @@ class Pawn(Piece):
         self.direction = -1 if colour == "white" else 1
         super().__init__(name="Pawn", colour=colour, value=1)
 
+    @property
+    def allowed_directions(self):
+        yield (self.direction, 0)
     
     def possible_moves(self, row:int, col:int):
         
@@ -65,9 +68,21 @@ class Knight(Piece):
     def __init__(self, colour:str):
         super().__init__(name="Knight", colour=colour, value=3)
     
+    @property
+    def allowed_directions(self):
+        for move in [
+            (-2, 1),
+            (-2, -1),
+            (2, 1),
+            (2, -1),
+            (1, 2),
+            (1, -2),
+            (-1, 2),
+            (-1, -2)
+        ]:
+            yield move
     
     def possible_moves(self, row:int, col:int):
-        
         for move in [
             [row + 2, col + 1],
             [row + 2, col - 1],
@@ -86,25 +101,23 @@ class Bishop(Piece):
     def __init__(self, colour:str):
         super().__init__(name="Bishop", colour=colour, value=3)
     
-    
-    def possible_moves(self, row:int, col:int):
-         
-         for move in [
+    @property
+    def allowed_directions(self):
+        for direction in [
             (-1, 1), # up right
             (-1, -1), # up left
             (1, 1), # down right
             (1, -1) # down left
         ]:
-            yield move
-        
+            yield direction
+    
 class Rook(Piece):
 
     def __init__(self, colour:str):
         super().__init__(name="Rook", colour=colour, value=5)
     
-    
-    def possible_moves(self, row:int, col:int):
-        
+    @property
+    def allowed_directions(self):
         for move in [
             (-1, 0), # up
             (1, 0), # down
@@ -118,9 +131,8 @@ class Queen(Piece):
     def __init__(self, colour:str):
         super().__init__(name="Queen", colour=colour, value=9)
     
-    
-    def possible_moves(self, row:int, col:int):
-        
+    @property
+    def allowed_directions(self):
         for move in  [
             (-1, 0), # up
             (1, 0), # down
@@ -133,21 +145,21 @@ class Queen(Piece):
         ]:
             yield move
             
-
 class King(Piece):
 
     def __init__(self, colour:str):
         super().__init__(name="King", colour=colour, value=None)
         
-    
-    def possible_moves(self, row:int, col:int):
-        return [
-            (row + 1, col),
-            (row + 1, col + 1),
-            (row + 1, col - 1),
-            (row, col + 1),
-            (row, col - 1),
-            (row - 1, col),
-            (row - 1, col + 1),
-            (row - 1, col - 1)
-        ]
+    @property
+    def allowed_directions(self):
+        for move in  [
+            (-1, 0), # up
+            (1, 0), # down
+            (0, 1), # right
+            (0, -1), # left
+            (-1, 1), # up right
+            (-1, -1), # up left
+            (1, 1), # down right
+            (1, -1) # down left
+        ]:
+            yield move
